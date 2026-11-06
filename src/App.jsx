@@ -630,8 +630,7 @@ function Login({ onLogin }) {
 
       <form className="login-box" onSubmit={submit}>
         <div className="login-heading">
-          <div className="login-icon-wrap">
-            <Phone size={22} />
+          <div className="">
           </div>
           <h2>Login to Celebrate</h2>
         </div>
