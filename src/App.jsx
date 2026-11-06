@@ -869,58 +869,54 @@ function Dashboard({ user, onLogout }) {
     <main className="dashboard screen-fit-dashboard">
       <FestiveCanvas />
 
-            {/* Header with Brand & Logout */}
+            {/* Header with Centered Brand & Logout */}
             <header className="dash-header">
-                <div className="dash-brand">
-                  <span className="brand-diya">🪔</span>
-                  <span className="brand-title">Festival Wishes</span>
+              <div className="dash-brand">
+                <span className="brand-diya">🪔</span>
+                <span className="brand-title shimmer-text">Festival Wishes</span>
+                <span className="brand-diya brand-diya-right">🪔</span>
+              </div>
+              <div className="dash-header-actions">
+                <button className="logout-btn" onClick={onLogout} title="Logout">
+                  <LogOut size={15} />
+                  <span>Logout</span>
+                </button>
+              </div>
+            </header>
+
+            <div className="dash-garland">
+              <FestiveToran />
             </div>
-            <div className="dash-header-actions">
-              <button className="logout-btn" onClick={onLogout} title="Logout">
-                <LogOut size={16} />
-                <span>Logout</span>
-              </button>
-            </div>
-          </header>
 
-          <div className="dash-garland">
-            <FestiveToran />
-          </div>
+            {/* Rotated Card Viewport */}
+            <section
+              className="festival-carousel-viewport"
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
+              <div
+                key={currentSlide}
+                className={`festival-slide-card slide-anim-${direction}`}
+              >
+                {/* Type 1: Festival Wishes Slide (Dhanteras, Diwali, Chhath Puja) - NO badge tag overlay */}
+                {!slide.type && (
+                  <div className="slide-festival-content">
+                    <div className="slide-photo-wrap">
+                      <img src={slide.image} alt={slide.title} className="slide-hero-img" />
+                    </div>
 
-          {/* 3D Rotated Card Viewport */}
-                  <section
-                    className="festival-carousel-viewport"
-                    onTouchStart={handleTouchStart}
-                    onTouchEnd={handleTouchEnd}
-                  >
-                    <div
-                      key={currentSlide}
-                      className={`festival-slide-card slide-anim-${direction}`}
-                    >
-                      <div className="slide-card-glow" />
-
-                      {/* Type 1: Festival Wishes Slide (Dhanteras, Diwali, Chhath Puja) */}
-                      {!slide.type && (
-                        <div className="slide-festival-content">
-                          <div className="slide-photo-wrap">
-                            <img src={slide.image} alt={slide.title} className="slide-hero-img" />
-                            <div className="slide-tag-badge">
-                              <Sparkles size={13} /> {slide.tag}
-                            </div>
-                          </div>
-
-                          <div className="slide-body">
-                            <div className="slide-icon-large">{slide.icon}</div>
-                            <h2 className="slide-title shimmer-text">{slide.title}</h2>
-                            <div className="slide-ornament">✧ ───── ❈ ───── ✧</div>
-                            <p className="slide-main-text">{slide.text}</p>
-                            {slide.subtext && <p className="slide-subtext">{slide.subtext}</p>}
-                            <div className="slide-diyas-wrap">
-                              <Diyas />
-                            </div>
-                          </div>
-                        </div>
-          )}
+                    <div className="slide-body">
+                      <div className="slide-icon-large">{slide.icon}</div>
+                      <h2 className="slide-title shimmer-text">{slide.title}</h2>
+                      <div className="slide-ornament">✧ ───── ❈ ───── ✧</div>
+                      <p className="slide-main-text">{slide.text}</p>
+                      {slide.subtext && <p className="slide-subtext">{slide.subtext}</p>}
+                      <div className="slide-diyas-wrap">
+                        <Diyas />
+                      </div>
+                    </div>
+                  </div>
+                )}
 
           {/* Type 2: WhatsApp Local Video Slide (after Chhath Puja) */}
           {slide.type === 'video' && (
