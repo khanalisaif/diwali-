@@ -3,6 +3,7 @@ import {
   LogOut,
   Phone,
   Play,
+  Pause,
   Heart,
   ChevronRight,
   ChevronLeft,
@@ -619,10 +620,10 @@ function Login({ onLogin }) {
           </p>
           <div className="ornament">✧ ❧ ❈ ❧ ✧</div>
 
-              {/* ONLY ONE PHOTO: image (52).png in custom frame sized for full 16:9 landscape photo */}
+              {/* ONLY ONE PHOTO: video-poster.png in custom frame sized for full 16:9 landscape photo */}
               <div className="single-photo-container">
                 <div className="single-photo-frame">
-                  <img src="/image (52).png" alt="Diwali Celebration" className="single-photo-img" />
+                  <img src="/video-poster.png" alt="Diwali Celebration" className="single-photo-img" />
                 </div>
               </div>
             </div>
@@ -707,49 +708,129 @@ function Login({ onLogin }) {
           subtext: 'Bhagwan Bhaskar aur Chhathi Maiya ki kripa se aapke jeevan mein naya savera aur apaar unnati aave.',
           nextLabel: 'Next: Watch Special Video'
   },
-          {
-            id: 'special-video',
-          stepTitle: 'Special Video',
-          title: 'Festival Special Celebration Video',
-          tag: 'EXCLUSIVE CELEBRATION',
-          icon: '🎬',
-          type: 'video',
-          videoSrc: '/WhatsApp Video 2026-11-06 at 5.10.23 PM.mp4',
-          text: 'Auspicious festival moments filled with joy, diyas, laughter and celebrations with loved ones.',
-          nextLabel: 'Next: YouTube Celebration'
+  {
+    id: 'special-video',
+    stepTitle: 'Special Video',
+    title: 'Festival Special Celebration Video',
+    tag: 'EXCLUSIVE CELEBRATION',
+    icon: '🎬',
+    type: 'video',
+    videoSrc: '/festival-video.mp4',
+    poster: '/video-poster.png',
+    text: 'Auspicious festival moments filled with joy, diyas, laughter and celebrations with loved ones.',
+    nextLabel: 'Next: YouTube Celebration'
   },
-          {
-            id: 'youtube-video',
-          stepTitle: 'YouTube',
-          title: 'YouTube Celebration Special',
-          tag: 'DIWALI SPECIAL MUSIC & JOY',
-          icon: '▶️',
-          type: 'youtube',
-          text: 'Enjoy festive music and glorious celebration moments to make this Diwali unforgettable!',
-          nextLabel: 'Celebrate Again'
+  {
+    id: 'youtube-video',
+    stepTitle: 'YouTube',
+    title: 'YouTube Celebration Special',
+    tag: 'DIWALI SPECIAL MUSIC & JOY',
+    icon: '▶️',
+    type: 'youtube',
+    text: 'Enjoy festive music and glorious celebration moments to make this Diwali unforgettable!',
+    nextLabel: 'Celebrate Again'
   }
-          ];
+];
 
-          // Dashboard: Rotated multi-page transition (Next slides left) with WhatsApp Video & YouTube
-          function Dashboard({user, onLogout}) {
-          const [currentSlide, setCurrentSlide] = useState(0);
-          const [direction, setDirection] = useState('next');
-          const [touchStartX, setTouchStartX] = useState(null);
-          const videoRef = useRef(null);
-          const youtubeId = import.meta.env.VITE_YOUTUBE_VIDEO_ID;
+// Interactive Celebration Video with Image Preview (NO black frame) & Center Start/Pause Buttons
+function FestivalVideoPlayer({ src, poster }) {
+  const videoRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
 
-          const total = festivalSlides.length;
-          const slide = festivalSlides[currentSlide];
+  const togglePlay = (e) => {
+    if (e) e.stopPropagation();
+    const v = videoRef.current;
+    if (!v) return;
 
-  // Pause local video if leaving the video slide
+    if (v.paused || v.ended) {
+      v.play()
+        .then(() => {
+          setIsPlaying(true);
+          setHasStarted(true);
+        })
+        .catch((err) => {
+          console.warn('Video play prevented:', err);
+        });
+    } else {
+      v.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  return (
+    <div className="local-video-shell" onClick={togglePlay}>
+      {/* 1. Crystal clear poster from second photo - guarantees NO black frame */}
+      {!hasStarted && (
+        <img
+          src={poster}
+          alt="Festival Celebration Video"
+          className="video-poster-fallback-img"
+        />
+      )}
+
+      {/* 2. Video element */}
+      <video
+        ref={videoRef}
+        className={`local-video-player ${!hasStarted ? 'video-hidden-before-start' : ''}`}
+        src={src}
+        controls={hasStarted}
+        playsInline
+        preload="auto"
+        poster={poster}
+        onPlay={() => {
+          setIsPlaying(true);
+          setHasStarted(true);
+        }}
+        onPause={() => setIsPlaying(false)}
+        onEnded={() => {
+          setIsPlaying(false);
+          setHasStarted(false);
+        }}
+      >
+        Your browser does not support the video tag.
+      </video>
+
+      {/* 3. Center Start (Play) & Push (Pause) button */}
+      {(!hasStarted || !isPlaying) && (
+        <button
+          type="button"
+          className="center-video-btn"
+          aria-label={isPlaying ? 'Pause video' : 'Play video'}
+          onClick={togglePlay}
+        >
+          {isPlaying ? (
+            <Pause size={32} fill="#ffffff" color="#ffffff" />
+          ) : (
+            <Play size={32} fill="#ffffff" color="#ffffff" className="play-triangle-offset" />
+          )}
+        </button>
+      )}
+
+      {!hasStarted && (
+        <div className="video-center-tap-label">
+          <span>▶ Tap to Play Celebration</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Dashboard: Rotated multi-page transition (Next slides left) with WhatsApp Video & YouTube
+function Dashboard({ user, onLogout }) {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [direction, setDirection] = useState('next');
+  const [touchStartX, setTouchStartX] = useState(null);
+  const youtubeId = import.meta.env.VITE_YOUTUBE_VIDEO_ID;
+
+  const total = festivalSlides.length;
+  const slide = festivalSlides[currentSlide];
+
   const changeSlide = (newIndex, dir) => {
     if (newIndex < 0 || newIndex >= total) return;
-          if (videoRef.current && currentSlide === 3) {
-            videoRef.current.pause();
-    }
-          setDirection(dir);
-          setCurrentSlide(newIndex);
-          window.scrollTo({top: 120, behavior: 'smooth' });
+    setDirection(dir);
+    setCurrentSlide(newIndex);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const goNext = () => {
@@ -784,9 +865,9 @@ function Login({ onLogin }) {
           setTouchStartX(null);
   };
 
-          return (
-          <main className="dashboard">
-            <FestiveCanvas />
+  return (
+    <main className="dashboard screen-fit-dashboard">
+      <FestiveCanvas />
 
             {/* Header with Brand & Logout */}
             <header className="dash-header">
@@ -806,33 +887,7 @@ function Login({ onLogin }) {
             <FestiveToran />
           </div>
 
-            <section className="dash-intro">
-              <div className="dash-kicker">
-                <span>✧</span> Festival of Prosperity, Light and Devotion <span>✧</span>
-              </div>
-              <h1 className="dash-main-title shimmer-text">Our Festival Celebration</h1>
-
-                    {/* Step Navigation Bar / Progress Pills */}
-                    <div className="step-nav-bar">
-                      {festivalSlides.map((s, idx) => (
-                        <button
-                          key={s.id}
-                          className={`step-pill ${idx === currentSlide ? 'active' : ''} ${idx < currentSlide ? 'completed' : ''}`}
-                          onClick={() => changeSlide(idx, idx > currentSlide ? 'next' : 'prev')}
-                          title={s.stepTitle}
-                        >
-                          <span className="step-icon">{s.icon}</span>
-                          <span className="step-label">{s.stepTitle}</span>
-                          {idx === currentSlide && <span className="step-active-dot" />}
-                        </button>
-                      ))}
-                    </div>
-                    <div className="step-counter-text">
-                      Page {currentSlide + 1} of {total} &nbsp;·&nbsp; <span>{slide.stepTitle}</span>
-                    </div>
-                  </section>
-
-                  {/* 3D Rotated Card Viewport */}
+          {/* 3D Rotated Card Viewport */}
                   <section
                     className="festival-carousel-viewport"
                     onTouchStart={handleTouchStart}
@@ -871,26 +926,14 @@ function Login({ onLogin }) {
           {slide.type === 'video' && (
             <div className="slide-video-content">
               <div className="slide-video-header">
-                <div className="slide-tag-badge">
-                  <Sparkles size={13} /> {slide.tag}
+                <div className="slide-tag-badge-inline">
+                  <Sparkles size={12} /> {slide.tag}
                 </div>
                 <h2 className="slide-title shimmer-text">{slide.title}</h2>
                 <p className="slide-video-desc">{slide.text}</p>
               </div>
 
-              <div className="local-video-shell">
-                <video
-                  ref={videoRef}
-                  className="local-video-player"
-                  src={slide.videoSrc}
-                  controls
-                  playsInline
-                  preload="metadata"
-                  poster="/52.jpeg"
-                >
-                  Your browser does not support the video tag.
-                </video>
-              </div>
+              <FestivalVideoPlayer src={slide.videoSrc} poster={slide.poster} />
 
               <div className="slide-video-note">
                 <span>🪔</span> Special Moments of Celebration <span>🪔</span>
@@ -902,8 +945,8 @@ function Login({ onLogin }) {
           {slide.type === 'youtube' && (
             <div className="slide-video-content">
               <div className="slide-video-header">
-                <div className="slide-tag-badge">
-                  <Sparkles size={13} /> {slide.tag}
+                <div className="slide-tag-badge-inline">
+                  <Sparkles size={12} /> {slide.tag}
                 </div>
                 <h2 className="slide-title shimmer-text">{slide.title}</h2>
                 <p className="slide-video-desc">{slide.text}</p>
@@ -953,18 +996,19 @@ function Login({ onLogin }) {
           )}
 
           {/* Bottom Interactive Navigation on every slide */}
-          <div className="slide-bottom-nav">
-            {currentSlide > 0 ? (
+          <div className={`slide-bottom-nav ${currentSlide === 0 ? 'slide-nav-dhanteras' : ''}`}>
+            {currentSlide > 0 && (
               <button className="nav-btn nav-btn-prev" onClick={goPrev}>
                 <ChevronLeft size={18} />
                 <span>Previous</span>
               </button>
-            ) : (
-              <div className="nav-btn-placeholder" />
             )}
 
             {currentSlide < total - 1 ? (
-              <button className="nav-btn nav-btn-next" onClick={goNext}>
+              <button
+                className={`nav-btn nav-btn-next ${currentSlide === 0 ? 'nav-btn-centered' : ''}`}
+                onClick={goNext}
+              >
                 <span>{slide.nextLabel || 'Next'}</span>
                 <ChevronRight size={18} />
               </button>
@@ -978,15 +1022,11 @@ function Login({ onLogin }) {
         </div>
       </section>
 
-      <footer className="dash-footer">
-        <Diyas />
-        <p>Wishing you and your family a very Happy &amp; Prosperous Diwali</p>
-        <small>
-          MADE WITH <Heart size={12} fill="currentColor" className="heart-pulse" /> AND FESTIVE LOVE
-        </small>
+      <footer className="dash-footer-compact">
+        <span>✨ Wishing you &amp; your family a Happy &amp; Prosperous Diwali ✨</span>
       </footer>
     </main>
-                    );
+  );
 }
 
                     export default function App() {
