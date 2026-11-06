@@ -1,0 +1,1 @@
+export default {content:['./index.html','./src/**/*.{js,jsx}'],theme:{extend:{fontFamily:{sans:['Poppins','sans-serif'],display:['Playfair Display','serif'],script:['Great Vibes','cursive']}}},plugins:[]};
