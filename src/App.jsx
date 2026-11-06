@@ -588,125 +588,125 @@ function Login({ onLogin }) {
 
   function submit(e) {
     e.preventDefault();
-      if (!/^\d{10}$/.test(mobile.trim())) {
-        setError('Kripya apna 10 digit mobile number enter karein.');
-        return;
-      }
-      onLogin({ mobile: mobile.trim() });
+    if (!/^\d{10}$/.test(mobile.trim())) {
+      setError('Kripya apna 10 digit mobile number enter karein.');
+      return;
     }
+    onLogin({ mobile: mobile.trim() });
+  }
 
-    return (
-      <main className="login-screen">
-        <FestiveCanvas />
-        <div className="login-bg-lights" />
-        <FestiveToran />
-        <div className="welcome-art">
-          <div className="welcome-label">
-            <span className="welcome-namaste">🙏</span> Welcome to Diwali Celebration{' '}
-            <span className="welcome-namaste">🙏</span>
+  return (
+    <main className="login-screen">
+      <FestiveCanvas />
+      <div className="login-bg-lights" />
+      <FestiveToran />
+      <div className="welcome-art">
+        <div className="welcome-label">
+          <span className="welcome-namaste">🙏</span> Welcome to Diwali Celebration{' '}
+          <span className="welcome-namaste">🙏</span>
+        </div>
+
+        {/* Big glowing Diya - properly centered and visible */}
+        <div className="lamp-mark-wrap">
+          <div className="lamp-mark">🪔</div>
+          <div className="diya-aura" />
+          <div className="diya-aura diya-aura-2" />
+        </div>
+
+        <h1 className="welcome-title shimmer-text">Happy Diwali</h1>
+        <p className="welcome-text">
+          Wishing you and your family a<br />
+          very Happy &amp; Prosperous Diwali
+        </p>
+        <div className="ornament">✧ ❧ ❈ ❧ ✧</div>
+
+        {/* ONLY ONE PHOTO: video-poster.png in custom frame sized for full 16:9 landscape photo */}
+        <div className="single-photo-container">
+          <div className="single-photo-frame">
+            <img src="/video-poster.png" alt="Diwali Celebration" className="single-photo-img" />
           </div>
+        </div>
+      </div>
 
-          {/* Big glowing Diya - properly centered and visible */}
-          <div className="lamp-mark-wrap">
-            <div className="lamp-mark">🪔</div>
-            <div className="diya-aura" />
-            <div className="diya-aura diya-aura-2" />
+      <form className="login-box" onSubmit={submit}>
+        <div className="login-heading">
+          <div className="login-icon-wrap">
+            <Phone size={22} />
           </div>
+          <h2>Login to Celebrate</h2>
+        </div>
 
-          <h1 className="welcome-title shimmer-text">Happy Diwali</h1>
-          <p className="welcome-text">
-            Wishing you and your family a<br />
-            very Happy &amp; Prosperous Diwali
-          </p>
-          <div className="ornament">✧ ❧ ❈ ❧ ✧</div>
+        <label className="login-input">
+          <Phone className="input-icon" />
+          <input
+            value={mobile}
+            onChange={(e) => {
+              setMobile(e.target.value.replace(/\D/g, '').slice(0, 10));
+              if (error) setError('');
+            }}
+            placeholder="Enter 10-Digit Mobile Number"
+            inputMode="numeric"
+            maxLength={10}
+            autoFocus
+          />
+        </label>
 
-              {/* ONLY ONE PHOTO: video-poster.png in custom frame sized for full 16:9 landscape photo */}
-              <div className="single-photo-container">
-                <div className="single-photo-frame">
-                  <img src="/video-poster.png" alt="Diwali Celebration" className="single-photo-img" />
-                </div>
-              </div>
-            </div>
+        {error && <p className="error">{error}</p>}
 
-            <form className="login-box" onSubmit={submit}>
-              <div className="login-heading">
-                <div className="login-icon-wrap">
-                  <Phone size={22} />
-                </div>
-                <h2>Login to Celebrate</h2>
-              </div>
+        <button className="login-button" type="submit">
+          <span>➜ &nbsp; Login to Celebrate</span>
+        </button>
 
-              <label className="login-input">
-                <Phone className="input-icon" />
-                <input
-                  value={mobile}
-                  onChange={(e) => {
-                    setMobile(e.target.value.replace(/\D/g, '').slice(0, 10));
-                    if (error) setError('');
-                  }}
-                  placeholder="Enter 10-Digit Mobile Number"
-                  inputMode="numeric"
-                  maxLength={10}
-                  autoFocus
-                />
-              </label>
+        {/* 3 Centered, dancing, glowing Diyas */}
+        <div className="login-diyas-container">
+          <Diyas />
+        </div>
+      </form>
 
-              {error && <p className="error">{error}</p>}
-
-              <button className="login-button" type="submit">
-                <span>➜ &nbsp; Login to Celebrate</span>
-              </button>
-
-              {/* 3 Centered, dancing, glowing Diyas */}
-              <div className="login-diyas-container">
-                <Diyas />
-              </div>
-            </form>
-
-            <div className="login-footer">
-              ✦ &nbsp; MAY THE LIGHT OF DIWALI BRIGHTEN YOUR LIFE &nbsp; ✦
-            </div>
-          </main>
-          );
+      <div className="login-footer">
+        ✦ &nbsp; MAY THE LIGHT OF DIWALI BRIGHTEN YOUR LIFE &nbsp; ✦
+      </div>
+    </main>
+  );
 }
 
-          // 5 Step Festival Slides: Dhanteras -> Diwali -> Chhath Puja -> WhatsApp Video -> YouTube
-          const festivalSlides = [
-          {
-            id: 'dhanteras',
-          stepTitle: 'Dhanteras',
-          title: 'Happy Dhanteras',
-          tag: 'PROSPERITY & GOOD FORTUNE',
-          icon: '🪙',
-          image: '/images/dhanteras-art.jpg',
-          greeting: 'Shubh Dhanteras',
-          text: 'May this Dhanteras bring wealth, good health and prosperity to your home. May Goddess Lakshmi bless you with abundance and happiness.',
-          subtext: 'Dhanvantari aur Maa Lakshmi ke aashirwaad se aapka jeevan sadaiva sukh, samriddhi aur aarogya se paripoorna rahe.',
-          nextLabel: 'Next: Happy Diwali'
+// 5 Step Festival Slides: Dhanteras -> Diwali -> Chhath Puja -> WhatsApp Video -> YouTube
+const festivalSlides = [
+  {
+    id: 'dhanteras',
+    stepTitle: 'Dhanteras',
+    title: 'Happy Dhanteras',
+    tag: 'PROSPERITY & GOOD FORTUNE',
+    icon: '',
+    image: '/images/dhanteras-art.jpg',
+    greeting: 'Shubh Dhanteras',
+    text: 'May this Dhanteras bring wealth, good health and prosperity to your home. May Goddess Lakshmi bless you with abundance and happiness.',
+    subtext: 'Dhanvantari aur Maa Lakshmi ke aashirwaad se aapka jeevan sadaiva sukh, samriddhi aur aarogya se paripoorna rahe.',
+    nextLabel: 'Next: Happy Diwali'
   },
-          {
-            id: 'diwali',
-          stepTitle: 'Diwali',
-          title: 'Happy Diwali',
-          tag: 'FESTIVAL OF LIGHTS',
-          icon: '🪔',
-          image: '/images/diwali-art.jpg',
-          greeting: 'Shubh Deepawali',
-          text: 'May the festival of lights remove darkness from your life and fill it with happiness, peace and success. Wishing you and your family a sparkling Diwali.',
-          subtext: 'Deepon ka ye paavan tyohar aapke aangan mein khushiyan, pragati aur prem ki amrit dhara bahaaye.',
-          nextLabel: 'Next: Happy Chhath Puja'
+  {
+    id: 'diwali',
+    stepTitle: 'Diwali',
+    title: 'Happy Diwali',
+    tag: 'FESTIVAL OF LIGHTS',
+    icon: '',
+    image: '/images/diwali-art.jpg',
+    greeting: 'Shubh Deepawali',
+    text: 'May the festival of lights remove darkness from your life and fill it with happiness, peace and success. Wishing you and your family a sparkling Diwali.',
+    subtext: 'Deepon ka ye paavan tyohar aapke aangan mein khushiyan, pragati aur prem ki amrit dhara bahaaye.',
+    nextLabel: 'Next: Happy Chhath Puja'
   },
-          {
-            id: 'chhath',
-          stepTitle: 'Chhath Puja',
-          title: 'Happy Chhath Puja',
-          tag: 'FAITH & DEVOTION',
-          icon: '🌅',
-          image: '/images/chhath-art.jpg',
-          greeting: 'Chhath Mahaparv',
-          text: 'May the blessings of Surya Dev bring good health, happiness and prosperity to you and your family. Chhath Puja ki hardik shubhkamnayein.',
-          subtext: 'Bhagwan Bhaskar aur Chhathi Maiya ki kripa se aapke jeevan mein naya savera aur apaar unnati aave.',
-          nextLabel: 'Next: Watch Special Video'
+  {
+    id: 'chhath',
+    stepTitle: 'Chhath Puja',
+    title: 'Happy Chhath Puja',
+    tag: 'FAITH & DEVOTION',
+    icon: '',
+    image: '/images/chhath-art.jpg',
+    greeting: 'Chhath Mahaparv',
+    text: 'May the blessings of Surya Dev bring good health, happiness and prosperity to you and your family. Chhath Puja ki hardik shubhkamnayein.',
+    subtext: 'Bhagwan Bhaskar aur Chhathi Maiya ki kripa se aapke jeevan mein naya savera aur apaar unnati aave.',
+    nextLabel: 'Next: Watch Special Video'
   },
   {
     id: 'special-video',
@@ -835,88 +835,88 @@ function Dashboard({ user, onLogout }) {
 
   const goNext = () => {
     if (currentSlide < total - 1) {
-            changeSlide(currentSlide + 1, 'next');
+      changeSlide(currentSlide + 1, 'next');
     } else {
-            // Replay from start
-            changeSlide(0, 'prev');
+      // Replay from start
+      changeSlide(0, 'prev');
     }
   };
 
   const goPrev = () => {
     if (currentSlide > 0) {
-            changeSlide(currentSlide - 1, 'prev');
+      changeSlide(currentSlide - 1, 'prev');
     }
   };
 
   const handleTouchStart = (e) => {
-            setTouchStartX(e.touches[0].clientX);
+    setTouchStartX(e.touches[0].clientX);
   };
 
   const handleTouchEnd = (e) => {
     if (touchStartX === null) return;
-          const diff = touchStartX - e.changedTouches[0].clientX;
+    const diff = touchStartX - e.changedTouches[0].clientX;
     if (diff > 45) {
-            // Swiped left -> Go Next
-            goNext();
+      // Swiped left -> Go Next
+      goNext();
     } else if (diff < -45) {
-            // Swiped right -> Go Prev
-            goPrev();
+      // Swiped right -> Go Prev
+      goPrev();
     }
-          setTouchStartX(null);
+    setTouchStartX(null);
   };
 
   return (
     <main className="dashboard screen-fit-dashboard">
       <FestiveCanvas />
 
-            {/* Header with Centered Brand & Logout */}
-            <header className="dash-header">
-              <div className="dash-brand">
-                <span className="brand-diya">🪔</span>
-                <span className="brand-title shimmer-text">Festival Wishes</span>
-                <span className="brand-diya brand-diya-right">🪔</span>
-              </div>
-              <div className="dash-header-actions">
-                <button className="logout-btn" onClick={onLogout} title="Logout">
-                  <LogOut size={15} />
-                  <span>Logout</span>
-                </button>
-              </div>
-            </header>
+      {/* Header with Centered Brand & Logout */}
+      <header className="dash-header">
+        <div className="dash-brand">
+          <span className="brand-diya">🪔</span>
+          <span className="brand-title shimmer-text">Festival Wishes</span>
+          <span className="brand-diya brand-diya-right">🪔</span>
+        </div>
+        <div className="dash-header-actions">
+          <button className="logout-btn" onClick={onLogout} title="Logout">
+            <LogOut size={15} />
+            <span>Logout</span>
+          </button>
+        </div>
+      </header>
 
-            <div className="dash-garland">
-              <FestiveToran />
+      <div className="dash-garland">
+        <FestiveToran />
+      </div>
+
+      {/* Rotated Card Viewport */}
+      <section
+        className="festival-carousel-viewport"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div
+          key={currentSlide}
+          className={`festival-slide-card slide-anim-${direction}`}
+        >
+          {/* Type 1: Festival Wishes Slide (Dhanteras, Diwali, Chhath Puja) - NO badge tag overlay */}
+          {!slide.type && (
+            <div className="slide-festival-content">
+              <div className="slide-photo-wrap">
+                <img src={slide.image} alt={slide.title} className="slide-hero-img" />
+              </div>
+
+              <div className="slide-body">
+                <div className="slide-icon-large">{slide.icon}</div>
+                <h2 className="slide-title shimmer-text">{slide.title}</h2>
+                <div className="slide-ornament">✧ ───── ❈ ───── ✧</div>
+                <p className="slide-main-text">{slide.text}</p>
+                {slide.subtext && <p className="slide-subtext">{slide.subtext}</p>}
+                <div className="slide-diyas-wrap">
+                  <Diyas />
+                </div>
+              </div>
             </div>
-
-            {/* Rotated Card Viewport */}
-            <section
-              className="festival-carousel-viewport"
-              onTouchStart={handleTouchStart}
-              onTouchEnd={handleTouchEnd}
-            >
-              <div
-                key={currentSlide}
-                className={`festival-slide-card slide-anim-${direction}`}
-              >
-                {/* Type 1: Festival Wishes Slide (Dhanteras, Diwali, Chhath Puja) - NO badge tag overlay */}
-                {!slide.type && (
-                  <div className="slide-festival-content">
-                    <div className="slide-photo-wrap">
-                      <img src={slide.image} alt={slide.title} className="slide-hero-img" />
-                    </div>
-
-                    <div className="slide-body">
-                      <div className="slide-icon-large">{slide.icon}</div>
-                      <h2 className="slide-title shimmer-text">{slide.title}</h2>
-                      <div className="slide-ornament">✧ ───── ❈ ───── ✧</div>
-                      <p className="slide-main-text">{slide.text}</p>
-                      {slide.subtext && <p className="slide-subtext">{slide.subtext}</p>}
-                      <div className="slide-diyas-wrap">
-                        <Diyas />
-                      </div>
-                    </div>
-                  </div>
-                )}
+          )}
 
           {/* Type 2: WhatsApp Local Video Slide (after Chhath Puja) */}
           {slide.type === 'video' && (
@@ -1025,14 +1025,14 @@ function Dashboard({ user, onLogout }) {
   );
 }
 
-                    export default function App() {
+export default function App() {
   const [intro, setIntro] = useState(true);
-                    const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
 
-                    if (intro) return <Intro done={() => setIntro(false)} />;
-                    return user ? (
-                    <Dashboard user={user} onLogout={() => setUser(null)} />
-                    ) : (
-                    <Login onLogin={setUser} />
-                    );
+  if (intro) return <Intro done={() => setIntro(false)} />;
+  return user ? (
+    <Dashboard user={user} onLogout={() => setUser(null)} />
+  ) : (
+    <Login onLogin={setUser} />
+  );
 }
